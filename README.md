@@ -2,6 +2,15 @@
 
 A modern, responsive movie discovery web application built with React, TypeScript, and Tailwind CSS. The app allows users to explore movies, search for specific titles, and view detailed information about each movie.
 
+## Screenshots
+
+![DevFinder Screenshot](/public/image1.png)
+
+![DevFinder Screenshot](/public/image2.png)
+![DevFinder Screenshot](/public/image.png)
+
+
+
 ## Features
 
 - Browse popular movies
