@@ -1,4 +1,4 @@
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, UseInfiniteQueryResult } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import { searchMovies } from '../services/api';
 import MovieCard from '../components/MovieCard';
@@ -22,7 +22,10 @@ const TopRated = () => {
     isFetchingNextPage,
     status,
     error,
-  } = useInfiniteQuery({
+  }: UseInfiniteQueryResult<
+    { page: number; total_pages: number; results: Movie[] },
+    Error
+  > = useInfiniteQuery({
     queryKey: ['top-rated'],
     queryFn: ({ pageParam }) => searchMovies('award winning', pageParam as number),
     getNextPageParam: (lastPage: { page: number; total_pages: number }) =>
@@ -30,7 +33,7 @@ const TopRated = () => {
     initialPageParam: 1
   });
 
-  if (status === 'loading') {
+  if (status === 'pending') {
     return (
       <div className="flex justify-center items-center h-64">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-accent"></div>

@@ -1,4 +1,4 @@
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, UseInfiniteQueryResult } from '@tanstack/react-query';
 import { useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { searchMovies } from '../services/api';
@@ -26,12 +26,16 @@ const Search = () => {
     isFetchingNextPage,
     status,
     error,
-  } = useInfiniteQuery({
+  }: UseInfiniteQueryResult<
+    { page: number; total_pages: number; results: Movie[] },
+    Error
+  > = useInfiniteQuery({
     queryKey: ['search', query],
-    queryFn: ({ pageParam = 1 }) => searchMovies(query, pageParam),
-    getNextPageParam: (lastPage) =>
+    queryFn: ({ pageParam }) => searchMovies(query, pageParam as number),
+    getNextPageParam: (lastPage: { page: number; total_pages: number }) =>
       lastPage.page < lastPage.total_pages ? lastPage.page + 1 : undefined,
     enabled: !!query,
+    initialPageParam: 1,
   });
 
   if (!query) {
@@ -42,7 +46,7 @@ const Search = () => {
     );
   }
 
-  if (status === 'loading') {
+  if (status === 'pending') {
     return (
       <div className="flex justify-center items-center h-64">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-accent"></div>
