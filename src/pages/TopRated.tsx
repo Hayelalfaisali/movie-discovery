@@ -24,9 +24,10 @@ const TopRated = () => {
     error,
   } = useInfiniteQuery({
     queryKey: ['top-rated'],
-    queryFn: ({ pageParam = 1 }) => searchMovies('award winning', pageParam),
-    getNextPageParam: (lastPage) =>
+    queryFn: ({ pageParam }) => searchMovies('award winning', pageParam as number),
+    getNextPageParam: (lastPage: { page: number; total_pages: number }) =>
       lastPage.page < lastPage.total_pages ? lastPage.page + 1 : undefined,
+    initialPageParam: 1
   });
 
   if (status === 'loading') {
