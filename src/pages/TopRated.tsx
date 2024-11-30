@@ -1,8 +1,8 @@
-import { useInfiniteQuery, UseInfiniteQueryResult } from '@tanstack/react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import { searchMovies } from '../services/api';
 import MovieCard from '../components/MovieCard';
-import type { Movie } from '../types/movie';
+import type { Movie, MovieResponse } from '../types/api';
 
 const container = {
   hidden: { opacity: 0 },
@@ -22,13 +22,10 @@ const TopRated = () => {
     isFetchingNextPage,
     status,
     error,
-  }: UseInfiniteQueryResult<
-    { page: number; total_pages: number; results: Movie[] },
-    Error
-  > = useInfiniteQuery({
+  } = useInfiniteQuery<MovieResponse>({
     queryKey: ['top-rated'],
     queryFn: ({ pageParam }) => searchMovies('award winning', pageParam as number),
-    getNextPageParam: (lastPage: { page: number; total_pages: number }) =>
+    getNextPageParam: (lastPage: MovieResponse) =>
       lastPage.page < lastPage.total_pages ? lastPage.page + 1 : undefined,
     initialPageParam: 1
   });
@@ -54,7 +51,7 @@ const TopRated = () => {
     return null;
   }
 
-  const movies = data.pages.flatMap((page: { results: Movie[] }) => page.results);
+  const movies = data.pages.flatMap((page: MovieResponse) => page.results);
 
   return (
     <div>

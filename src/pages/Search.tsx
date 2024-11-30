@@ -1,9 +1,9 @@
-import { useInfiniteQuery, UseInfiniteQueryResult } from '@tanstack/react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import { useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { searchMovies } from '../services/api';
 import MovieCard from '../components/MovieCard';
-import type { Movie } from '../types/movie';
+import type { Movie, MovieResponse } from '../types/api';
 
 const container = {
   hidden: { opacity: 0 },
@@ -26,13 +26,10 @@ const Search = () => {
     isFetchingNextPage,
     status,
     error,
-  }: UseInfiniteQueryResult<
-    { page: number; total_pages: number; results: Movie[] },
-    Error
-  > = useInfiniteQuery({
+  } = useInfiniteQuery<MovieResponse>({
     queryKey: ['search', query],
     queryFn: ({ pageParam }) => searchMovies(query, pageParam as number),
-    getNextPageParam: (lastPage: { page: number; total_pages: number }) =>
+    getNextPageParam: (lastPage: MovieResponse) =>
       lastPage.page < lastPage.total_pages ? lastPage.page + 1 : undefined,
     enabled: !!query,
     initialPageParam: 1,
@@ -67,7 +64,7 @@ const Search = () => {
     return null;
   }
 
-  const movies = data.pages.flatMap((page: { results: Movie[] }) => page.results);
+  const movies = data.pages.flatMap((page: MovieResponse) => page.results);
 
   if (movies.length === 0) {
     return (
