@@ -63,11 +63,11 @@ const Search = () => {
     );
   }
 
-  if (!data || !data.pages) {
+  if (!data) {
     return null;
   }
 
-  const movies = data.pages.flatMap((page) => page.results);
+  const movies = data.pages.flatMap((page: { results: Movie[] }) => page.results);
 
   if (movies.length === 0) {
     return (

@@ -50,11 +50,11 @@ const TopRated = () => {
     );
   }
 
-  if (!data || !data.pages) {
+  if (!data) {
     return null;
   }
 
-  const movies = data.pages.flatMap((page) => page.results);
+  const movies = data.pages.flatMap((page: { results: Movie[] }) => page.results);
 
   return (
     <div>

@@ -4,6 +4,13 @@ import { motion } from 'framer-motion';
 import { StarIcon, ClockIcon } from '@heroicons/react/24/solid';
 import { getMovieDetails, getMovieCredits } from '../services/api';
 
+interface Actor {
+  id: number;
+  name: string;
+  profile_path: string | null;
+  character: string;
+}
+
 const MovieDetails = () => {
   const { id } = useParams<{ id: string }>();
 
@@ -77,7 +84,7 @@ const MovieDetails = () => {
         <div className="container mx-auto my-8">
           <h2 className="text-2xl font-bold mb-4">Cast</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-            {credits.cast.map((actor) => (
+            {credits.cast.map((actor: Actor) => (
               <div key={actor.id} className="text-center">
                 <div className="w-full h-48 bg-secondary rounded-lg mb-2 flex items-center justify-center">
                   <span className="text-4xl">👤</span>
